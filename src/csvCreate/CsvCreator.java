@@ -1,6 +1,7 @@
 package csvCreate;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,7 @@ public class CsvCreator {
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 		File rawFile = new File("NYC_City_Hall_Library_Publications.xml");
 		File output = new File("INTEGRATED-DATASET");
+		
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
