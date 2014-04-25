@@ -13,7 +13,8 @@ import java.io.*;
 public class Records {
 
 	private static Map<String, Integer> itemMap = new HashMap<String, Integer>();
-	private static List<ArrayList<Integer>> records = new ArrayList<ArrayList<Integer>>();
+	private static ArrayList<String> itemTable = new ArrayList<String>();
+	private static ArrayList<ArrayList<Integer>> records = new ArrayList<ArrayList<Integer>>();
 
 	public Map<String, Integer> getItemMap() {
 		return itemMap;
@@ -27,8 +28,18 @@ public class Records {
 		return records;
 	}
 
-	public static void setRecords(List<ArrayList<Integer>> records) {
+	public static void setRecords(ArrayList<ArrayList<Integer>> records) {
 		Records.records = records;
+	}
+	
+	
+
+	public static List<String> getItemTable() {
+		return itemTable;
+	}
+
+	public static void setItemTable(ArrayList<String> itemTable) {
+		Records.itemTable = itemTable;
 	}
 
 	public static void genRecordList(File file) throws IOException {
@@ -45,7 +56,8 @@ public class Records {
 			 */
 			for (String item : transaction) {
 				if (!itemMap.containsKey(item)) {
-					itemMap.put(item, ++i);
+					itemMap.put(item, i++);
+					itemTable.add(item);
 				}
 			}
 
