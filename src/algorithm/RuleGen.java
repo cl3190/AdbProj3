@@ -5,8 +5,14 @@ import java.io.*;
 
 public class RuleGen {
 
+	/*
+	 * this hash map is to map some itemSet in String, for fast look up in
+	 * genRules method
+	 */
+	private static HashMap<String, Integer> itemSupportMap = new HashMap<String, Integer>();
+
 	public static ArrayList<ItemCountPair> genSupportForAll(
-			ArrayList<ArrayList<Integer>> records, List<String> itemTable,
+			ArrayList<ArrayList<Integer>> records, ArrayList<String> itemTable,
 			double support) {
 		/*
 		 * this one contains the ItemCount Pair for all combinations of items
@@ -37,9 +43,19 @@ public class RuleGen {
 				if (itemCountPair.getCount() < targetSupportCount) {
 					nextRound.remove(itemCountPair);
 
+				} else {
+					/* union the Large-k itemset */
+					ret.add(itemCountPair);
+					/* add to the itemSet map */
+					StringBuffer hashCodeSb = new StringBuffer();
+					for (Integer ind : itemCountPair.getItemSet()) {
+						hashCodeSb.append(itemTable.get(ind) + ",");
+					}
+					itemSupportMap.put(hashCodeSb.toString(),
+							itemCountPair.getCount());
 				}
 			}
-			ret.addAll(nextRound);
+
 		}
 
 		return ret;
@@ -127,12 +143,40 @@ public class RuleGen {
 
 	}
 
-	public static ArrayList<RulePair> genRules(ArrayList<ItemCountPair> supportTable, double confidence) {
-		for(int i=0;i<supportTable.size();i++){
-			for(int j=i+1;j<supportTable.size();j++){
-				
+	public static ArrayList<RulePair> genRules(
+			ArrayList<ItemCountPair> supportTable, ArrayList<String> itemTable,
+			double confidence) {
+
+		ArrayList<RulePair> ret = new ArrayList<RulePair>();
+
+		for (int i = 0; i < supportTable.size(); i++) {
+			for (int j = i + 1; j < supportTable.size(); j++) {
+				Integer i_union_j_sup = null;
+				StringBuffer i_hashcode_sb = new StringBuffer();
+				StringBuffer j_hashcode_sb = new StringBuffer();
+
+				for (Integer ind : supportTable.get(i).getItemSet()) {
+					i_hashcode_sb.append(itemTable.get(ind) + ",");
+				}
+				for (Integer ind : supportTable.get(j).getItemSet()) {
+					j_hashcode_sb.append(itemTable.get(ind) + ",");
+				}
+
+				if (itemSupportMap.get(i_hashcode_sb.toString()+j_hashcode_sb.toString())
+						/ itemSupportMap
+								.get(i_hashcode_sb.toString()) > confidence) {
+					ret.add(new RulePair(i_hashcode_sb.toString(), j_hashcode_sb.toString()));
+				}
+				if(itemSupportMap.get(i_hashcode_sb.toString()+j_hashcode_sb.toString())
+						/ itemSupportMap
+						.get(j_hashcode_sb.toString()) > confidence){
+					ret.add(new RulePair(j_hashcode_sb.toString(), i_hashcode_sb.toString()));
+					
+				}
 			}
 		}
+		
+		return ret;
 	}
 
 	public static void main(String[] args) {
@@ -143,6 +187,12 @@ public class RuleGen {
 			Records.genRecordList(file);
 			ArrayList<ItemCountPair> allSetsSupport = RuleGen.genSupportForAll(
 					Records.getRecords(), Records.getItemTable(), support);
+
+			ArrayList<RulePair> rules = RuleGen.genRules(allSetsSupport, Records.getItemTable(), confidence);
+			for(RulePair rule : rules){
+				System.out.println(rule.getLefthand()+" => "+rule.getRighthand());
+			}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

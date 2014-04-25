@@ -3,25 +3,27 @@ package algorithm;
 import java.util.*;
 
 public class RulePair {
-	private ArrayList<Integer> leftHand = new ArrayList<Integer>();
-	private ArrayList<Integer> rightHand = new ArrayList<Integer>();
-	public RulePair(ArrayList<Integer> leftHand, ArrayList<Integer> rightHand) {
+	private String lefthand;
+	private String righthand;
+	public RulePair(String lefthand, String righthand) {
 		super();
-		this.leftHand = leftHand;
-		this.rightHand = rightHand;
+		this.lefthand = lefthand.substring(0, lefthand.length()-1);
+		this.righthand = righthand.substring(0, righthand.length()-1);
 	}
-	public ArrayList<Integer> getLeftHand() {
-		return leftHand;
+	public String getLefthand() {
+		return lefthand;
 	}
-	public void setLeftHand(ArrayList<Integer> leftHand) {
-		this.leftHand = leftHand;
+	public void setLefthand(String lefthand) {
+		this.lefthand = lefthand;
 	}
-	public ArrayList<Integer> getRightHand() {
-		return rightHand;
+	public String getRighthand() {
+		return righthand;
 	}
-	public void setRightHand(ArrayList<Integer> rightHand) {
-		this.rightHand = rightHand;
+	public void setRighthand(String righthand) {
+		this.righthand = righthand;
 	}
+	
+	
 	
 	
 }
