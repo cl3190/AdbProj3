@@ -24,7 +24,7 @@ public class Records {
 		this.itemMap = itemMap;
 	}
 
-	public static List<ArrayList<Integer>> getRecords() {
+	public static ArrayList<ArrayList<Integer>> getRecords() {
 		return records;
 	}
 
@@ -34,7 +34,7 @@ public class Records {
 	
 	
 
-	public static List<String> getItemTable() {
+	public static ArrayList<String> getItemTable() {
 		return itemTable;
 	}
 

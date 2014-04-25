@@ -127,6 +127,14 @@ public class RuleGen {
 
 	}
 
+	public static ArrayList<RulePair> genRules(ArrayList<ItemCountPair> supportTable, double confidence) {
+		for(int i=0;i<supportTable.size();i++){
+			for(int j=i+1;j<supportTable.size();j++){
+				
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		double support = 0.3;
 		double confidence = 0.3;
