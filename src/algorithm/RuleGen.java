@@ -39,9 +39,11 @@ public class RuleGen {
 			}
 			// drop all the itemSet that do not reach the minimum support
 			int targetSupportCount = (int) Math.ceil(records.size() * support);
-			for (ItemCountPair itemCountPair : nextRound) {
+			Iterator<ItemCountPair> iter = nextRound.iterator();
+			while (iter.hasNext()) {
+				ItemCountPair itemCountPair = iter.next();
 				if (itemCountPair.getCount() < targetSupportCount) {
-					nextRound.remove(itemCountPair);
+					iter.remove();
 
 				} else {
 					/* union the Large-k itemset */
@@ -55,6 +57,8 @@ public class RuleGen {
 							itemCountPair.getCount());
 				}
 			}
+
+			prevRound = nextRound;
 
 		}
 
@@ -109,7 +113,9 @@ public class RuleGen {
 			}
 
 			// below is the pruning parse
-			for (ItemCountPair itemCountPair : thisRound) {
+			Iterator<ItemCountPair> iter = thisRound.iterator();
+			while (iter.hasNext()) {
+				ItemCountPair itemCountPair = iter.next();
 				ArrayList<Integer> itemSet_k = itemCountPair.getItemSet();
 
 				boolean hasMatch = false;
@@ -134,7 +140,7 @@ public class RuleGen {
 					}
 				}
 				if (!hasMatch) {
-					thisRound.remove(itemCountPair);
+					iter.remove();
 				}
 			}
 		}
@@ -162,35 +168,42 @@ public class RuleGen {
 					j_hashcode_sb.append(itemTable.get(ind) + ",");
 				}
 
-				if (itemSupportMap.get(i_hashcode_sb.toString()+j_hashcode_sb.toString())
-						/ itemSupportMap
-								.get(i_hashcode_sb.toString()) > confidence) {
-					ret.add(new RulePair(i_hashcode_sb.toString(), j_hashcode_sb.toString()));
-				}
-				if(itemSupportMap.get(i_hashcode_sb.toString()+j_hashcode_sb.toString())
-						/ itemSupportMap
-						.get(j_hashcode_sb.toString()) > confidence){
-					ret.add(new RulePair(j_hashcode_sb.toString(), i_hashcode_sb.toString()));
-					
+				if (itemSupportMap.get(i_hashcode_sb.toString()
+						+ j_hashcode_sb.toString()) != null) {
+					if (itemSupportMap.get(i_hashcode_sb.toString()
+							+ j_hashcode_sb.toString())
+							/ itemSupportMap.get(i_hashcode_sb.toString()) >= confidence) {
+						ret.add(new RulePair(i_hashcode_sb.toString(),
+								j_hashcode_sb.toString()));
+					}
+					if (itemSupportMap.get(i_hashcode_sb.toString()
+							+ j_hashcode_sb.toString())
+							/ itemSupportMap.get(j_hashcode_sb.toString()) >= confidence) {
+						ret.add(new RulePair(j_hashcode_sb.toString(),
+								i_hashcode_sb.toString()));
+
+					}
 				}
 			}
 		}
-		
+
 		return ret;
 	}
 
 	public static void main(String[] args) {
-		double support = 0.3;
-		double confidence = 0.3;
+		double support = 0.004;
+		double confidence = 0.5;
 		File file = new File("INTEGRATED-DATASET");
 		try {
 			Records.genRecordList(file);
 			ArrayList<ItemCountPair> allSetsSupport = RuleGen.genSupportForAll(
 					Records.getRecords(), Records.getItemTable(), support);
 
-			ArrayList<RulePair> rules = RuleGen.genRules(allSetsSupport, Records.getItemTable(), confidence);
-			for(RulePair rule : rules){
-				System.out.println(rule.getLefthand()+" => "+rule.getRighthand());
+			ArrayList<RulePair> rules = RuleGen.genRules(allSetsSupport,
+					Records.getItemTable(), confidence);
+			for (RulePair rule : rules) {
+				System.out.println(rule.getLefthand() + " => "
+						+ rule.getRighthand());
 			}
 
 		} catch (Exception ex) {
