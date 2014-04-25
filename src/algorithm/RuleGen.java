@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
@@ -157,7 +158,6 @@ public class RuleGen {
 
 		for (int i = 0; i < supportTable.size(); i++) {
 			for (int j = i + 1; j < supportTable.size(); j++) {
-				Integer i_union_j_sup = null;
 				StringBuffer i_hashcode_sb = new StringBuffer();
 				StringBuffer j_hashcode_sb = new StringBuffer();
 
@@ -170,17 +170,23 @@ public class RuleGen {
 
 				if (itemSupportMap.get(i_hashcode_sb.toString()
 						+ j_hashcode_sb.toString()) != null) {
-					if (itemSupportMap.get(i_hashcode_sb.toString()
-							+ j_hashcode_sb.toString())
-							/ itemSupportMap.get(i_hashcode_sb.toString()) >= confidence) {
+					double i_union_j_support = (double) itemSupportMap
+							.get(i_hashcode_sb.toString()
+									+ j_hashcode_sb.toString());
+					double i_to_j_conf = i_union_j_support
+							/ itemSupportMap.get(i_hashcode_sb.toString());
+					double j_to_i_conf = i_union_j_support
+							/ itemSupportMap.get(j_hashcode_sb.toString());
+
+					if (i_to_j_conf >= confidence) {
 						ret.add(new RulePair(i_hashcode_sb.toString(),
-								j_hashcode_sb.toString()));
+								j_hashcode_sb.toString(), i_union_j_support,
+								i_to_j_conf));
 					}
-					if (itemSupportMap.get(i_hashcode_sb.toString()
-							+ j_hashcode_sb.toString())
-							/ itemSupportMap.get(j_hashcode_sb.toString()) >= confidence) {
+					if (j_to_i_conf >= confidence) {
 						ret.add(new RulePair(j_hashcode_sb.toString(),
-								i_hashcode_sb.toString()));
+								i_hashcode_sb.toString(), i_union_j_support,
+								j_to_i_conf));
 
 					}
 				}
@@ -191,20 +197,62 @@ public class RuleGen {
 	}
 
 	public static void main(String[] args) {
-		double support = 0.004;
-		double confidence = 0.5;
-		File file = new File("INTEGRATED-DATASET");
+		double support = 0.7;
+		double confidence = 0.8;
+		File file = new File("TOY_EXAMPLE");
+		File outputFile = new File("output.txt");
+
+		if (support < 0 || support > 1 || confidence < 0 || confidence > 1) {
+			System.out
+					.println("Support and Confidence must be in the range of 0 to 1");
+			return;
+		}
+
 		try {
+
 			Records.genRecordList(file);
 			ArrayList<ItemCountPair> allSetsSupport = RuleGen.genSupportForAll(
 					Records.getRecords(), Records.getItemTable(), support);
 
 			ArrayList<RulePair> rules = RuleGen.genRules(allSetsSupport,
 					Records.getItemTable(), confidence);
-			for (RulePair rule : rules) {
-				System.out.println(rule.getLefthand() + " => "
-						+ rule.getRighthand());
+
+			/* output results to output file */
+			if (outputFile.exists()) {
+				outputFile.delete();
 			}
+			outputFile.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(outputFile));
+
+			out.write("==Frequent itemsets (min_sup=" + (int) (support * 100)
+					+ "%)\n");
+			Iterator it = itemSupportMap.entrySet().iterator();
+			Integer recordLength = Records.getRecords().size();
+			while (it.hasNext()) {
+				Map.Entry pairs = (Map.Entry) it.next();
+				String key = (String) pairs.getKey();
+				Integer val = (Integer) pairs.getValue();
+				double raw_percent = (double) val / recordLength * 100;
+				DecimalFormat df = new DecimalFormat("######0.00");
+				out.write("[" + key.substring(0, key.length() - 1) + "] , "
+						+ df.format(raw_percent) + "%\n");
+				it.remove(); // avoids a ConcurrentModificationException
+			}
+
+			out.write("\n");
+			out.write("High-confidence association rules (min_conf="
+					+ (int) (confidence * 100) + "%)\n");
+			for (RulePair rule : rules) {
+				double raw_sup_percent = rule.getSupport() / recordLength * 100;
+				DecimalFormat df = new DecimalFormat("######0.00");
+				out.write("[" + rule.getLefthand() + "] => ["
+						+ rule.getRighthand() + "](Conf: "
+						+ (int) (rule.getConfidence() * 100) + "%, Supp: "
+						+ df.format(raw_sup_percent) + "%)\n");
+			}
+			out.flush();
+
+			System.out.println("Result has been written to \"output.txt\"");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
