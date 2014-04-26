@@ -1,4 +1,3 @@
-package algorithm;
 
 import java.util.*;
 import java.io.*;
@@ -10,7 +9,7 @@ import java.io.*;
  * 
  * records is the Integer representation of each transaction, and sorted
  */
-public class Records {
+public class AllRecords {
 
 	private static Map<String, Integer> itemMap = new HashMap<String, Integer>();
 	private static ArrayList<String> itemTable = new ArrayList<String>();
@@ -29,7 +28,7 @@ public class Records {
 	}
 
 	public static void setRecords(ArrayList<ArrayList<Integer>> records) {
-		Records.records = records;
+		AllRecords.records = records;
 	}
 	
 	
@@ -39,7 +38,7 @@ public class Records {
 	}
 
 	public static void setItemTable(ArrayList<String> itemTable) {
-		Records.itemTable = itemTable;
+		AllRecords.itemTable = itemTable;
 	}
 
 	public static void genRecordList(File file) throws IOException {

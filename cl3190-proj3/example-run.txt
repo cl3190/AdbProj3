@@ -1,0 +1,48 @@
+==Frequent itemsets (min_sup=5%)
+[Audit Report,Comptroller] , 9.58%
+[Finance and Budget,Budget Report,Management and Budget] , 8.46%
+[Comptroller] , 12.05%
+[City Planning,Legislative Document] , 29.74%
+[Legislative Document,Housing and Buildings] , 30.66%
+[Finance and Budget,Audit Report,Comptroller] , 9.03%
+[Report,Sanitation] , 6.47%
+[Finance] , 7.69%
+[Management and Budget] , 9.07%
+[Housing and Buildings] , 36.82%
+[Finance and Budget,Budget Report] , 12.15%
+[City Planning,Legislative Document,Housing and Buildings] , 29.50%
+[Finance and Budget,Finance] , 7.63%
+[Annual Report] , 10.39%
+[Budget Report] , 12.40%
+[Human Services] , 5.07%
+[Finance and Budget,Management and Budget] , 9.03%
+[Finance and Budget] , 31.41%
+[Sanitation] , 11.40%
+[Finance and Budget,Comptroller] , 11.46%
+[Finance and Budget,Audit Report] , 9.03%
+[Budget Report,Management and Budget] , 8.50%
+[Legislative Document] , 36.36%
+[City Planning,Housing and Buildings] , 29.66%
+[Audit Report] , 9.92%
+[City Planning] , 30.29%
+[Report] , 18.91%
+
+High-confidence association rules (min_conf=70%)
+[Budget Report] => [Finance and Budget](Conf: 98%, Supp: 12.15%)
+[Management and Budget] => [Finance and Budget](Conf: 99%, Supp: 9.03%)
+[Audit Report] => [Finance and Budget](Conf: 91%, Supp: 9.03%)
+[Comptroller] => [Finance and Budget](Conf: 95%, Supp: 11.46%)
+[Finance] => [Finance and Budget](Conf: 99%, Supp: 7.63%)
+[Budget Report,Management and Budget] => [Finance and Budget](Conf: 99%, Supp: 8.46%)
+[Audit Report,Comptroller] => [Finance and Budget](Conf: 94%, Supp: 9.03%)
+[Management and Budget] => [Budget Report](Conf: 93%, Supp: 8.50%)
+[City Planning] => [Legislative Document](Conf: 98%, Supp: 29.74%)
+[Legislative Document] => [City Planning](Conf: 81%, Supp: 29.74%)
+[City Planning] => [Housing and Buildings](Conf: 97%, Supp: 29.66%)
+[Housing and Buildings] => [City Planning](Conf: 80%, Supp: 29.66%)
+[City Planning] => [Legislative Document,Housing and Buildings](Conf: 97%, Supp: 29.50%)
+[Legislative Document,Housing and Buildings] => [City Planning](Conf: 96%, Supp: 29.50%)
+[Legislative Document] => [Housing and Buildings](Conf: 84%, Supp: 30.66%)
+[Housing and Buildings] => [Legislative Document](Conf: 83%, Supp: 30.66%)
+[Audit Report] => [Comptroller](Conf: 96%, Supp: 9.58%)
+[Comptroller] => [Audit Report](Conf: 79%, Supp: 9.58%)

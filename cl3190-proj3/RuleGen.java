@@ -1,4 +1,3 @@
-package algorithm;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -234,13 +233,18 @@ public class RuleGen {
 		}
 
 		try {
+			
+			if(!file.exists()){
+				System.out.println("The input file does not exists!");
+				return;
+			}
 
-			Records.genRecordList(file);
+			AllRecords.genRecordList(file);
 			ArrayList<ItemCountPair> allSetsSupport = RuleGen.genSupportForAll(
-					Records.getRecords(), Records.getItemTable(), support);
+					AllRecords.getRecords(), AllRecords.getItemTable(), support);
 
 			ArrayList<RulePair> rules = RuleGen.genRules(allSetsSupport,
-					Records.getItemTable(), confidence);
+					AllRecords.getItemTable(), confidence);
 
 			/* output results to output file */
 			if (outputFile.exists()) {
@@ -252,7 +256,7 @@ public class RuleGen {
 			out.write("==Frequent itemsets (min_sup=" + (int) (support * 100)
 					+ "%)\n");
 			Iterator it = itemSupportMap.entrySet().iterator();
-			Integer recordLength = Records.getRecords().size();
+			Integer recordLength = AllRecords.getRecords().size();
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
 				String key = (String) pairs.getKey();
@@ -265,7 +269,7 @@ public class RuleGen {
 			}
 
 			out.write("\n");
-			out.write("High-confidence association rules (min_conf="
+			out.write("==High-confidence association rules (min_conf="
 					+ (int) (confidence * 100) + "%)\n");
 			for (RulePair rule : rules) {
 				double raw_sup_percent = rule.getSupport() / recordLength * 100;

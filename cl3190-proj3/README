@@ -1,0 +1,59 @@
+Project 3
+Team members:
+Chaozhong Lian (cl3190)
+Jinxi Zhao (jz2540)
+
+1. What NYC Open Data data set we are using
+
+   The url for the data set we are using is:
+   https://data.cityofnewyork.us/Recreation/NYC-City-Hall-Library-Publications/ei8e-zggc
+
+   The main content is "NYC City Hall Library Publications"
+
+2. List of all the file we are submitting
+  1)CsvCreator.java
+    The java file used to create the csv file we need.
+  2)RuleGen.java
+    The class to perform the main operations to generate association rules.
+  3)AllRecords.java
+    The class to read the csv file and generate necessary data structures for RuleGen.java
+  4)ItemCountPair.java
+    The class to represent the item and its count of appeareance
+  5)RulePair.java
+    The class to represent the an association rule. Consist of left hand side and right hand side and its support and confidence.
+
+3. The procedure to map the dataset into the CSV file we used:
+
+
+4. Why our choice of data set is interesting:
+
+   In the dataset we choose, the Library has categorized each of their publication into three categories. And so, we extract the three categories into a row, so each row represents the three categories we can classify for one book.
+   Given this information, rules like the following will be generated:
+   [City Planning] => [Legislative Document](Conf: 98%, Supp: 29.74%)
+   And so we know that City Planning book are usually Legislative Document. So, for example, given a city planning book, we could assume it is a Legislative Document.
+
+5. how to run our program
+
+run:
+   chmod 777 run.sh
+   ./run.sh <csvFile name> <min_sup> <min_conf>
+
+   csvFile is the csv file used to generate association rules
+   min_sup is the minimum support, min_conf is the minimum confidence, they should be in the range of 0 to 1.
+
+   examples:
+   ./run.sh TOY_EXAMPLE.csv 0.7 0.8
+   ./run.sh INTEGRATED-DATASET.csv 0.01 0.7
+
+   The result will be output to "output.txt".
+
+6. internal design
+   The algorithm is as described in the paper.
+   We first give each single item an unique Integer, and the following calculation, we are just operating on the Integers rather than on the actually string, the string is only fetch in the end.
+   We use method genSupportForAll to generate the large sets of item-sets, that is, the item-sets with their count of appearance greater than the minimum support. This method calls apriori_gen, which generate the large item-set in the next round given the item-sets in the previous round. Apriori-gen consists of inserting parse and pruning parse, as discussed in the paper.
+   The last step is to use the method genRules to calculate the confidence of each association rules, and returning the rules having a confidence which is bigger than the minimum confidence.
+
+7.example-run
+  ./run.sh INTEGRATED-DATASET.csv 0.05 0.7
+
+  This is essentially asking for the rules with occurrence more than about 250 rows, and confidence more than 70%, which is enough to trust the association rules generated. So, as discussed before, from some type/types of a book, we can then assume it is also of some type/types.
