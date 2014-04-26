@@ -23,7 +23,7 @@ Jinxi Zhao (jz2540)
     The class to represent the an association rule. Consist of left hand side and right hand side and its support and confidence.
 
 3. The procedure to map the dataset into the CSV file we used:
-
+   The original dataset we downloaded is in XML format, "CsvCreator" program is used to transform the XML format to CSV format. Note that the origin dataset has more than three column, however, we extract only columns "category", "category_2", "category_3", which indicates three different kind of categories that a document can be classified as. We extract only these three column from XML file, and then write them to a CSV file.
 
 4. Why our choice of data set is interesting:
 
