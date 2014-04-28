@@ -32,11 +32,10 @@ Jinxi Zhao (jz2540)
    [City Planning] => [Legislative Document](Conf: 98%, Supp: 29.74%)
    And so we know that City Planning book are usually Legislative Document. So, for example, given a city planning book, we could assume it is a Legislative Document.
 
-5. how to run our program
+5. How to run our program
 
-run:
-   chmod 777 run.sh
-   ./run.sh <csvFile name> <min_sup> <min_conf>
+   1. make							//compile the program
+   2. ./run.sh <csvFile name> <min_sup> <min_conf>			//run the program
 
    csvFile is the csv file used to generate association rules
    min_sup is the minimum support, min_conf is the minimum confidence, they should be in the range of 0 to 1.
@@ -47,7 +46,7 @@ run:
 
    The result will be output to "output.txt".
 
-6. internal design
+6. Internal Design
    The algorithm is as described in the paper.
    We first give each single item an unique Integer, and the following calculation, we are just operating on the Integers rather than on the actually string, the string is only fetch in the end.
    We use method genSupportForAll to generate the large sets of item-sets, that is, the item-sets with their count of appearance greater than the minimum support. This method calls apriori_gen, which generate the large item-set in the next round given the item-sets in the previous round. Apriori-gen consists of inserting parse and pruning parse, as discussed in the paper.
