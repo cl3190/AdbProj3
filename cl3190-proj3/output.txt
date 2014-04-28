@@ -1,10 +1,10 @@
-==Frequent itemsets (min_sup=70%)
-[pen] , 100.00%
-[pen,ink] , 75.00%
-[diary] , 75.00%
-[ink] , 75.00%
-[pen,diary] , 75.00%
+==Frequent itemsets (min_sup=30%)
+[Finance and Budget] , 31.41%
+[Legislative Document,Housing and Buildings] , 30.66%
+[Legislative Document] , 36.36%
+[Housing and Buildings] , 36.82%
+[City Planning] , 30.29%
 
-High-confidence association rules (min_conf=80%)
-[ink] => [pen](Conf: 100%, Supp: 75.00%)
-[diary] => [pen](Conf: 100%, Supp: 75.00%)
+==High-confidence association rules (min_conf=30%)
+[Legislative Document] => [Housing and Buildings](Conf: 84%, Supp: 30.66%)
+[Housing and Buildings] => [Legislative Document](Conf: 83%, Supp: 30.66%)
